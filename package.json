@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "~0.18.0",
-    "ejs": "~2.5.8",
+    "dompurify": "~1.0.4",
+    "jsdom": "~11.11.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "~5.0.7",

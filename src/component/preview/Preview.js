@@ -1,10 +1,9 @@
 import React from 'react';
-import ejs from 'ejs';
-import fs from 'fs';
 import { connect } from 'react-redux';
 
 import { fetchEvents, errorOccurred } from '../../redux/meetup';
 import '../App.css';
+import './Preview.css';
 
 const Error = () => (
   <div className="App">
@@ -14,16 +13,9 @@ const Error = () => (
   </div>
 )
 
-const formatEvents = (groupedEvents, dispatchErrorOccurred) => {
-  try {
-    const data = fs.readFileSync(`${__dirname}/emailTemplate.ejs`, 'utf8');
-    const template = ejs.compile(data);
-    return template({ groupedEvents });
-  } catch (err) {
-    console.log(err);
-    dispatchErrorOccurred();
-  }
-}
+const createMarkup = (htmlContent) => ({
+  __html: htmlContent
+});
 
 const Preview = ({
   groupedEvents,
@@ -32,16 +24,16 @@ const Preview = ({
   dispatchFetchEvents,
   dispatchErrorOccurred,
 }) => {
-  const loader = isLoading ? <div className="loader"/>: null;
+  const loader = isLoading ? <div className="loader" /> : null;
   const error = hasError ? <Error /> : null;
-  const events = (!isLoading && !hasError && groupedEvents) ? formatEvents(groupedEvents, dispatchErrorOccurred) : null;
+  const events = (!isLoading && !hasError && groupedEvents) ? <div dangerouslySetInnerHTML={createMarkup(groupedEvents)} /> : null;
 
   return (
     <div>
       <button onClick={() => dispatchFetchEvents('28/05/2018')}>Fetch Event</button>
       {loader}
       {error}
-      {console.log(events)}
+      {events}
     </div>
   )
 }
