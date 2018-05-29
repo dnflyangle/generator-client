@@ -6,7 +6,6 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { fetchEvents } from '../../redux/meetup';
-import '../App.css';
 import './Preview.css';
 
 const createMarkup = htmlContent => ({
@@ -29,7 +28,7 @@ class Preview extends Component {
       dispatchFetchEvents,
     } = this.props;
     const loader = isLoading ? <div className="loader" /> : null;
-    const error = hasError ? <div className="App"><p className="App-intro">An Error occurred.</p></div> : null;
+    const error = hasError ? <div><p className="App-intro">An Error occurred.</p></div> : null;
     const events = (!isLoading && !hasError && eventsHTML) ?
       <div dangerouslySetInnerHTML={createMarkup(eventsHTML)} /> : null;
 
@@ -39,7 +38,7 @@ class Preview extends Component {
           selected={this.state.startDate}
           onChange={date => this.setState({ startDate: date })}
         />
-        <button onClick={() => dispatchFetchEvents(this.state.startDate)}>Fetch Event</button>
+        <button onClick={() => dispatchFetchEvents(this.state.startDate)}>Preview Event</button>
         {loader}
         {error}
         {events}
