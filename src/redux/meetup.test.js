@@ -47,4 +47,33 @@ describe('meetupReducer', () => {
       });
     });
   });
+  describe('reducer', () => {
+    it('should handle loading action', () => {
+      const store = meetupReducer(undefined, {type: 'FETCH_EVENT_LOADING'});
+      expect(store).toEqual({
+        isLoading: true,
+        hasError: false,
+        eventsHTML: undefined,
+      });
+    });
+    it('should handle error action', () => {
+      const store = meetupReducer(undefined, {type: 'FETCH_EVENT_ERROR'});
+      expect(store).toEqual({
+        isLoading: false,
+        hasError: true,
+        eventsHTML: undefined,
+      });
+    });
+    it('should handle success action', () => {
+      const store = meetupReducer(undefined, {
+        type: 'FETCH_EVENT_SUCCESS',
+        eventsHTML: 'html',
+      });
+      expect(store).toEqual({
+        isLoading: false,
+        hasError: false,
+        eventsHTML: 'html',
+      });
+    });
+  });
 });

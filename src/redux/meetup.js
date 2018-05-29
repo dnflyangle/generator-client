@@ -27,7 +27,7 @@ export const fetchEvents = date => dispatch => {
 const initialState = {
   isLoading: false,
   hasError: false,
-  purifiedHTML: undefined,
+  eventsHTML: undefined,
 };
 
 export default (state = initialState, action) => {
@@ -37,14 +37,14 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: true,
         hasError: false,
-        groupedEvents: undefined,
+        eventsHTML: undefined,
       }
     case FETCH_EVENT_ERROR:
       return {
         ...state,
         isLoading: false,
         hasError: true,
-        groupedEvents: undefined,
+        eventsHTML: undefined,
       }
     case FETCH_EVENT_SUCCESS:
       return {
