@@ -8,7 +8,7 @@ const FETCH_EVENT_SUCCESS = 'FETCH_EVENT_SUCCESS';
 
 const DOMPurify = createDOMPurify((new JSDOM('')).window);
 
-export const fetchEvents = date => dispatch => {
+export const fetchEvents = date => (dispatch) => {
   dispatch({ type: FETCH_EVENT_LOADING });
   return axios.post('https://generator-meetup-tw.herokuapp.com/generate', {
     date: date.format('DD/MM/YYYY'),
@@ -16,13 +16,13 @@ export const fetchEvents = date => dispatch => {
     .then((response) => {
       dispatch({
         type: FETCH_EVENT_SUCCESS,
-        eventsHTML: DOMPurify.sanitize(response.data)
+        eventsHTML: DOMPurify.sanitize(response.data),
       });
     })
     .catch(() => {
       dispatch({ type: FETCH_EVENT_ERROR });
     });
-}
+};
 
 const initialState = {
   isLoading: false,
@@ -38,21 +38,21 @@ export default (state = initialState, action) => {
         isLoading: true,
         hasError: false,
         eventsHTML: undefined,
-      }
+      };
     case FETCH_EVENT_ERROR:
       return {
         ...state,
         isLoading: false,
         hasError: true,
         eventsHTML: undefined,
-      }
+      };
     case FETCH_EVENT_SUCCESS:
       return {
         ...state,
         isLoading: false,
         hasError: false,
         eventsHTML: action.eventsHTML,
-      }
+      };
     default:
       return state;
   }

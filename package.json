@@ -7,6 +7,7 @@
     "dompurify": "~1.0.4",
     "jsdom": "~11.11.0",
     "moment": "~2.22.1",
+    "prop-types": "~15.6.1",
     "react": "^16.3.2",
     "react-datepicker": "~1.5.0",
     "react-dom": "^16.3.2",
@@ -22,6 +23,12 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-loader": "^1.8.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.0.1",
+    "eslint-plugin-react": "^7.1.0",
     "redux-mock-store": "~1.5.1"
   }
 }
