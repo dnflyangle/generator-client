@@ -27,24 +27,20 @@ class Preview extends Component {
   }
 
   render() {
-    const { groupedEvents,
+    const { eventsHTML,
       isLoading,
       hasError,
       dispatchFetchEvents,
-      dispatchErrorOccurred,
     } = this.props;
     const loader = isLoading ? <div className="loader" /> : null;
     const error = hasError ? <Error /> : null;
-    const events = (!isLoading && !hasError && groupedEvents) ? <div dangerouslySetInnerHTML={createMarkup(groupedEvents)} /> : null;
+    const events = (!isLoading && !hasError && eventsHTML) ? <div dangerouslySetInnerHTML={createMarkup(eventsHTML)} /> : null;
 
     return (
       <div>
         <DatePicker
           selected={this.state.startDate}
-          onChange={date => {
-            console.log(date);
-            this.setState({ startDate: date });
-          }}
+          onChange={date => this.setState({ startDate: date })}
         />
         <button onClick={() => dispatchFetchEvents(this.state.startDate)}>Fetch Event</button>
         {loader}
@@ -58,12 +54,11 @@ class Preview extends Component {
 const mapStateToProps = state => ({
   isLoading: state.meetup.isLoading,
   hasError: state.meetup.hasError,
-  groupedEvents: state.meetup.groupedEvents,
+  eventsHTML: state.meetup.eventsHTML,
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatchFetchEvents: date => dispatch(fetchEvents(date)),
-  dispatchErrorOccurred: () => dispatch(errorOccurred()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Preview);
