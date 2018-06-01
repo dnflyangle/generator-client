@@ -10,6 +10,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import Preview from './component/preview/Preview';
 import Home from './component/Home';
+import Header from './component/Header';
 
 const store = createStore(reducer, compose(
   applyMiddleware(thunk),
@@ -18,10 +19,12 @@ const store = createStore(reducer, compose(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        <Route path="/preview" component={Preview} />
-        <Route path="/" component={Home} />
-      </Switch>
+      <Header>
+        <Switch>
+          <Route path="/preview" component={Preview} />
+          <Route path="/" component={Home} />
+        </Switch>
+      </Header>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root'));
