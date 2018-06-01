@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import { Button } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { fetchEvents } from '../../redux/meetup';
@@ -39,7 +40,10 @@ class Preview extends Component {
           onChange={date => this.setState({ startDate: date })}
           dateFormat="DD/MM/YYYY"
         />
-        <button onClick={() => dispatchFetchEvents(this.state.startDate)}>Preview Event</button>
+        <Button
+          onClick={() => dispatchFetchEvents(this.state.startDate)}
+
+        >Preview Event</Button>
         {loader}
         {error}
         {events}
