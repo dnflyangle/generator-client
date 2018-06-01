@@ -37,6 +37,7 @@ class Preview extends Component {
         <DatePicker
           selected={this.state.startDate}
           onChange={date => this.setState({ startDate: date })}
+          dateFormat="DD/MM/YYYY"
         />
         <button onClick={() => dispatchFetchEvents(this.state.startDate)}>Preview Event</button>
         {loader}
