@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { Button, Panel, Grid, Row, Col } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
+import FontAwesome from 'react-fontawesome';
 
 import { fetchEvents } from '../../redux/meetup';
 import './Preview.css';
@@ -35,7 +36,7 @@ class Preview extends Component {
       hasError,
       dispatchFetchEvents,
     } = this.props;
-    const loader = isLoading ? <div className="loader" /> : null;
+    const loader = isLoading ? <FontAwesome name="spinner" spin size="2x" /> : null;
     const error = hasError ? <div><p className="App-intro">An Error occurred.</p></div> : null;
     const events = (!isLoading && !hasError && eventsHTML) ?
       <div dangerouslySetInnerHTML={createMarkup(eventsHTML)} /> : null;

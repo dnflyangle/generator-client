@@ -24,7 +24,7 @@ const Home = () => (
       </p>
     </div>
     <div className="well" style={wellStyles}>
-      <Button bsStyle="primary" bsSize="large" href="/" style={buttonStyle} block>
+      <Button bsStyle="primary" bsSize="large" href="/groups" style={buttonStyle} block>
         Maintain Meetup Groups
       </Button>
       <Button bsStyle="success" bsSize="large" href="/preview" block>
