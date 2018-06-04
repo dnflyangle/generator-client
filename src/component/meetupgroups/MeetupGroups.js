@@ -7,7 +7,6 @@ import FontAwesome from 'react-fontawesome';
 
 import { getGroups } from '../../redux/meetupGroups';
 
-
 class MeetupGroups extends Component {
   componentDidMount() {
     this.props.dispatchGetGroups();
@@ -23,9 +22,16 @@ class MeetupGroups extends Component {
     const loader = isLoading ? <FontAwesome name="spinner" spin size="2x" /> : null;
     const error = hasError ? <div><p className="App-intro">An Error occurred.</p></div> : null;
     const groupList = (!isLoading && !hasError && groups) ?
-      (<ListGroup>
-        {map(this.props.groups, group => <ListGroupItem>{group}</ListGroupItem>)}
-      </ListGroup>) : null;
+      (
+        <div style={{ padding: '0 10%' }}>
+          <h3>
+            Exisiting Meetup groups
+          </h3>
+          <ListGroup style={{ paddingTop: '1%' }}>
+            {map(this.props.groups, group => <ListGroupItem key={group}>{group}</ListGroupItem>)}
+          </ListGroup>
+        </div>
+      ) : null;
 
     return (
       <div>
