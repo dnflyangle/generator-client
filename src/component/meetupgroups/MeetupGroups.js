@@ -6,6 +6,7 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 
 import { getGroups } from '../../redux/meetupGroups';
+import AddGroup from './AddGroup';
 
 class MeetupGroups extends Component {
   componentDidMount() {
@@ -24,9 +25,10 @@ class MeetupGroups extends Component {
     const groupList = (!isLoading && !hasError && groups) ?
       (
         <div style={{ padding: '0 10%' }}>
-          <h3>
-            Exisiting Meetup groups
-          </h3>
+          <AddGroup />
+          <div>
+            <h3>Exisiting Meetup groups</h3>
+          </div>
           <ListGroup style={{ paddingTop: '1%' }}>
             {map(this.props.groups, group => <ListGroupItem key={group}>{group}</ListGroupItem>)}
           </ListGroup>
