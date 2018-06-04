@@ -3,6 +3,7 @@ import axios from 'axios';
 const FETCH_GROUPS_LOADING = 'FETCH_GROUPS_LOADING';
 const FETCH_GROUPS_ERROR = 'FETCH_GROUPS_ERROR';
 const FETCH_GROUPS_SUCCESS = 'FETCH_GROUPS_SUCCESS';
+const UPDATE_GROUPS = 'UPDATE_GROUPS';
 
 export const getGroups = () => (dispatch) => {
   dispatch({ type: FETCH_GROUPS_LOADING });
@@ -17,6 +18,11 @@ export const getGroups = () => (dispatch) => {
       dispatch({ type: FETCH_GROUPS_ERROR });
     });
 };
+
+export const updateGroups = groups => ({
+  type: UPDATE_GROUPS,
+  groups,
+});
 
 const initialState = {
   isLoading: false,
@@ -45,6 +51,11 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         hasError: false,
+        groups: action.groups,
+      };
+    case UPDATE_GROUPS:
+      return {
+        ...state,
         groups: action.groups,
       };
     default:
