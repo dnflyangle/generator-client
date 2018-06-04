@@ -2,7 +2,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 
-import addGroupReducer, { getGroups, getGroupNameFromUrl } from './addGroup';
+import addGroupReducer, { addGroupFromUrl, getGroupNameFromUrl } from './addGroup';
 
 jest.mock('axios', () => ({
   post: jest.fn(),
@@ -19,7 +19,7 @@ describe('AddGroup', () => {
     });
   });
   describe('action', () => {
-    describe('getGroups', () => {
+    describe('addGroupFromUrl', () => {
       const middlewares = [thunk];
       const mockStore = configureStore(middlewares);
       const store = mockStore({});
@@ -32,7 +32,7 @@ describe('AddGroup', () => {
 
       it('should dispatch loading action when start', async () => {
         axios.post.mockReturnValue(Promise.resolve({ data: null }));
-        await store.dispatch(getGroups(url));
+        await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_GROUPS_LOADING',
         });
@@ -40,7 +40,7 @@ describe('AddGroup', () => {
 
       it('should dispatch add group success and update groups', async () => {
         axios.post.mockReturnValue(Promise.resolve({ data: { groups: ['group1'] } }));
-        await store.dispatch(getGroups(url));
+        await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_SUCCESS',
         });
@@ -52,7 +52,7 @@ describe('AddGroup', () => {
 
       it('should dispatch fetch event error', async () => {
         axios.post.mockReturnValue(Promise.reject(new Error('error')));
-        await store.dispatch(getGroups(url));
+        await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
         });

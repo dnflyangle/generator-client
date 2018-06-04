@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { FormGroup, ControlLabel, HelpBlock, Button, FormControl, Well } from 'react-bootstrap';
+
+import { addGroupFromUrl } from '../../redux/addGroup';
 
 class AddGroup extends Component {
   constructor(props, context) {
@@ -26,28 +30,53 @@ class AddGroup extends Component {
   }
 
   render() {
+    const {
+      isLoading,
+      hasError,
+      isSuccess,
+      dispatchAddGroup,
+    } = this.props;
     return (
       <Well style={{ marginTop: '20px' }}>
-        <form>
-          <FormGroup
-            controlId="formBasicText"
-            validationState={this.getValidationState()}
-          >
-            <ControlLabel>Add new group</ControlLabel>
-            <FormControl
-              type="text"
-              value={this.state.value}
-              placeholder="Enter url"
-              onChange={this.handleChange}
-            />
-            <FormControl.Feedback />
-            <HelpBlock>For example: https://www.meetup.com/Sydney-CoreOS-User-Group/</HelpBlock>
-          </FormGroup>
-          <Button type="submit">Submit</Button>
-        </form>
+        <FormGroup
+          controlId="formBasicText"
+          validationState={this.getValidationState()}
+        >
+          <ControlLabel>Add new group</ControlLabel>
+          <FormControl
+            type="text"
+            placeholder="Enter url"
+            onChange={this.handleChange}
+          />
+          <FormControl.Feedback />
+          <HelpBlock>For example: https://www.meetup.com/Sydney-CoreOS-User-Group/</HelpBlock>
+        </FormGroup>
+        {hasError && <h5 style={{ color: 'red' }}>Failed to add group, please check the group url and try again.</h5> }
+        {isSuccess && <h5 style={{ color: 'green' }}>Successfully added group.</h5> }
+        <Button
+          disabled={isLoading}
+          onClick={() => dispatchAddGroup(this.state.value)}
+        >{isLoading ? 'Submitting...' : 'Submit'}</Button>
       </Well>
     );
   }
 }
 
-export default AddGroup;
+AddGroup.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  hasError: PropTypes.bool.isRequired,
+  isSuccess: PropTypes.bool.isRequired,
+  dispatchAddGroup: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.addGroup.isLoading,
+  hasError: state.addGroup.hasError,
+  isSuccess: state.addGroup.isSuccess,
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatchAddGroup: url => dispatch(addGroupFromUrl(url)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddGroup);
