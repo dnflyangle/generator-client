@@ -1,17 +1,16 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import moment from 'moment';
 import axios from 'axios';
 
-import meetupReducer, { fetchEvents } from './meetup';
+import meetupGroupReducer, { getGroups } from './meetupGroups';
 
 jest.mock('axios', () => ({
-  post: jest.fn(),
+  get: jest.fn(),
 }));
 
-describe('meetupReducer', () => {
+describe('meetupGroupReducer', () => {
   describe('action', () => {
-    describe('fetchEvents', () => {
+    describe('getGroups', () => {
       const middlewares = [thunk];
       const mockStore = configureStore(middlewares);
       const store = mockStore({});
@@ -22,57 +21,57 @@ describe('meetupReducer', () => {
       });
 
       it('should dispatch loading action when start', async () => {
-        axios.post.mockReturnValue(Promise.resolve({ data: null }));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        axios.get.mockReturnValue(Promise.resolve({ data: null }));
+        await store.dispatch(getGroups());
         expect(store.getActions()[0]).toEqual({
-          type: 'FETCH_EVENT_LOADING',
+          type: 'FETCH_GROUPS_LOADING',
         });
       });
 
       it('should dispatch fetch event success with purified dom data', async () => {
-        axios.post.mockReturnValue(Promise.resolve({ data: '<svg><g/onload=alert(2)//<p>' }));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        axios.get.mockReturnValue(Promise.resolve({ data: { groups: ['group1'] } }));
+        await store.dispatch(getGroups());
         expect(store.getActions()[1]).toEqual({
-          type: 'FETCH_EVENT_SUCCESS',
-          eventsHTML: '<svg><g></g></svg>',
+          type: 'FETCH_GROUPS_SUCCESS',
+          groups: ['group1'],
         });
       });
 
       it('should dispatch fetch event error', async () => {
-        axios.post.mockReturnValue(Promise.reject(new Error('error')));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        axios.get.mockReturnValue(Promise.reject(new Error('error')));
+        await store.dispatch(getGroups());
         expect(store.getActions()[1]).toEqual({
-          type: 'FETCH_EVENT_ERROR',
+          type: 'FETCH_GROUPS_ERROR',
         });
       });
     });
   });
   describe('reducer', () => {
     it('should handle loading action', () => {
-      const store = meetupReducer(undefined, { type: 'FETCH_EVENT_LOADING' });
+      const store = meetupGroupReducer(undefined, { type: 'FETCH_GROUPS_LOADING' });
       expect(store).toEqual({
         isLoading: true,
         hasError: false,
-        eventsHTML: undefined,
+        groups: undefined,
       });
     });
     it('should handle error action', () => {
-      const store = meetupReducer(undefined, { type: 'FETCH_EVENT_ERROR' });
+      const store = meetupGroupReducer(undefined, { type: 'FETCH_GROUPS_ERROR' });
       expect(store).toEqual({
         isLoading: false,
         hasError: true,
-        eventsHTML: undefined,
+        groups: undefined,
       });
     });
     it('should handle success action', () => {
-      const store = meetupReducer(undefined, {
-        type: 'FETCH_EVENT_SUCCESS',
-        eventsHTML: 'html',
+      const store = meetupGroupReducer(undefined, {
+        type: 'FETCH_GROUPS_SUCCESS',
+        groups: ['group1'],
       });
       expect(store).toEqual({
         isLoading: false,
         hasError: false,
-        eventsHTML: 'html',
+        groups: ['group1'],
       });
     });
   });
