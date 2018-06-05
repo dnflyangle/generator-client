@@ -30,7 +30,12 @@ class MeetupGroups extends Component {
             <h3>Exisiting Meetup groups</h3>
           </div>
           <ListGroup style={{ paddingTop: '1%' }}>
-            {map(this.props.groups, group => <ListGroupItem key={group}>{group}</ListGroupItem>)}
+            {map(this.props.groups, group => (
+              <ListGroupItem
+                key={group}
+                href={`https://www.meetup.com/${group}/`}
+                target="_blank"
+              >{group}</ListGroupItem>))}
           </ListGroup>
         </div>
       ) : null;

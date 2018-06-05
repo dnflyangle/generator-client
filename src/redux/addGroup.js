@@ -13,7 +13,7 @@ export const getGroupNameFromUrl = (url) => {
 
 export const addGroupFromUrl = url => (dispatch) => {
   dispatch({ type: ADD_GROUPS_LOADING });
-  return axios.post('http://localhost:3000/groups', {
+  return axios.post('https://generator-meetup-tw.herokuapp.com/groups', {
     groupName: getGroupNameFromUrl(url),
   })
     .then((response) => {
