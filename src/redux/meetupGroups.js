@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { orderBy } from 'lodash';
+import { GET_GROUPS } from './apiEndpoint';
 
 const FETCH_GROUPS_LOADING = 'FETCH_GROUPS_LOADING';
 const FETCH_GROUPS_ERROR = 'FETCH_GROUPS_ERROR';
@@ -8,7 +9,7 @@ const UPDATE_GROUPS = 'UPDATE_GROUPS';
 
 export const getGroups = () => (dispatch) => {
   dispatch({ type: FETCH_GROUPS_LOADING });
-  return axios.get('https://generator-meetup-tw.herokuapp.com/groups')
+  return axios.get(GET_GROUPS)
     .then((response) => {
       dispatch({
         type: FETCH_GROUPS_SUCCESS,

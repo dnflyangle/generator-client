@@ -1,6 +1,7 @@
 import axios from 'axios';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
+import { FETCH_EVENTS } from './apiEndpoint';
 
 const FETCH_EVENT_LOADING = 'FETCH_EVENT_LOADING';
 const FETCH_EVENT_ERROR = 'FETCH_EVENT_ERROR';
@@ -10,7 +11,7 @@ const DOMPurify = createDOMPurify((new JSDOM('')).window);
 
 export const fetchEvents = date => (dispatch) => {
   dispatch({ type: FETCH_EVENT_LOADING });
-  return axios.post('https://generator-meetup-tw.herokuapp.com/generate', {
+  return axios.post(FETCH_EVENTS, {
     date: date.format('DD/MM/YYYY'),
   })
     .then((response) => {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { replace } from 'lodash';
 import { updateGroups } from './meetupGroups';
+import { ADD_GROUPS } from './apiEndpoint';
 
 const ADD_GROUPS_LOADING = 'ADD_GROUPS_LOADING';
 const ADD_GROUPS_ERROR = 'ADD_GROUPS_ERROR';
@@ -13,7 +14,7 @@ export const getGroupNameFromUrl = (url) => {
 
 export const addGroupFromUrl = url => (dispatch) => {
   dispatch({ type: ADD_GROUPS_LOADING });
-  return axios.post('https://generator-meetup-tw.herokuapp.com/groups', {
+  return axios.post(ADD_GROUPS, {
     groupName: getGroupNameFromUrl(url),
   })
     .then((response) => {
