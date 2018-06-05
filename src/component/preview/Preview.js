@@ -47,7 +47,7 @@ class Preview extends Component {
           <Grid>
             <Row className="show-grid">
               <Col xs={6} md={4} style={{ textAlign: 'center' }}>
-                <h5>Pick a Date:</h5>
+                <h4>Pick a Date:</h4>
               </Col>
               <Col xs={6} md={4}>
                 <DatePicker
