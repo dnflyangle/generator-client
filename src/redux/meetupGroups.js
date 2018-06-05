@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { orderBy } from 'lodash';
 
 const FETCH_GROUPS_LOADING = 'FETCH_GROUPS_LOADING';
 const FETCH_GROUPS_ERROR = 'FETCH_GROUPS_ERROR';
@@ -11,7 +12,7 @@ export const getGroups = () => (dispatch) => {
     .then((response) => {
       dispatch({
         type: FETCH_GROUPS_SUCCESS,
-        groups: response.data.groups,
+        groups: orderBy(response.data.groups),
       });
     })
     .catch(() => {
