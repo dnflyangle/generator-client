@@ -11,7 +11,7 @@ jest.mock('axios', () => ({
 describe('AddGroup', () => {
   describe('getGroupNameFromUrl', () => {
     it('should trim group name correctly', () => {
-      const groupName = getGroupNameFromUrl('https://www.meetup.com/new-meetup/');
+      const groupName = getGroupNameFromUrl('https://www.meetup.com/new-meetup/event/123');
       expect(groupName).toEqual('new-meetup');
 
       const anotherGroupName = getGroupNameFromUrl('https://www.meetup.com/new-meetup');
