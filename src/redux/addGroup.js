@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { replace, isEmpty } from 'lodash';
+import { replace, isEmpty, includes } from 'lodash';
 import { updateGroups } from './meetupGroups';
 import { ADD_GROUPS } from './apiEndpoint';
 
@@ -15,17 +15,29 @@ export const getGroupNameFromUrl = (url) => {
   return replace(replace(groupURL[0], 'https://www.meetup.com/', ''), '/', '');
 };
 
-export const addGroupFromUrl = url => (dispatch) => {
+export const addGroupFromUrl = url => (dispatch, getState) => {
   dispatch({ type: ADD_GROUPS_LOADING });
+  const exisitingGroupNames = getState().meetupGroups.groups;
+  const newGroupName = getGroupNameFromUrl(url);
+  if (includes(exisitingGroupNames, newGroupName)) {
+    dispatch({
+      type: ADD_GROUPS_ERROR,
+      message: 'Group Already Exist.',
+    });
+    return null;
+  }
   return axios.post(ADD_GROUPS, {
-    groupName: getGroupNameFromUrl(url),
+    groupName: newGroupName,
   })
     .then((response) => {
       dispatch({ type: ADD_GROUPS_SUCCESS });
       dispatch(updateGroups(response.data.groups));
     })
     .catch(() => {
-      dispatch({ type: ADD_GROUPS_ERROR });
+      dispatch({
+        type: ADD_GROUPS_ERROR,
+        message: 'Failed to add group, please check the group url and try again.',
+      });
     });
 };
 
@@ -33,6 +45,7 @@ const initialState = {
   isLoading: false,
   hasError: false,
   isSuccess: false,
+  message: undefined,
 };
 
 export default (state = initialState, action) => {
@@ -50,6 +63,7 @@ export default (state = initialState, action) => {
         isLoading: false,
         hasError: true,
         isSuccess: false,
+        message: action.message,
       };
     case ADD_GROUPS_SUCCESS:
       return {

@@ -34,6 +34,7 @@ class AddGroup extends Component {
       isLoading,
       hasError,
       isSuccess,
+      message,
       dispatchAddGroup,
     } = this.props;
     return (
@@ -51,7 +52,7 @@ class AddGroup extends Component {
           <FormControl.Feedback />
           <HelpBlock>For example: https://www.meetup.com/Sydney-CoreOS-User-Group/</HelpBlock>
         </FormGroup>
-        {hasError && <h5 style={{ color: 'red' }}>Failed to add group, please check the group url and try again.</h5> }
+        {hasError && <h5 style={{ color: 'red' }}>{message}</h5> }
         {isSuccess && <h5 style={{ color: 'green' }}>Successfully added group.</h5> }
         <Button
           disabled={isLoading}
@@ -62,10 +63,15 @@ class AddGroup extends Component {
   }
 }
 
+AddGroup.defaultProps = {
+  message: undefined,
+};
+
 AddGroup.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   hasError: PropTypes.bool.isRequired,
   isSuccess: PropTypes.bool.isRequired,
+  message: PropTypes.string,
   dispatchAddGroup: PropTypes.func.isRequired,
 };
 
@@ -73,6 +79,7 @@ const mapStateToProps = state => ({
   isLoading: state.addGroup.isLoading,
   hasError: state.addGroup.hasError,
   isSuccess: state.addGroup.isSuccess,
+  message: state.addGroup.message,
 });
 
 const mapDispatchToProps = dispatch => ({

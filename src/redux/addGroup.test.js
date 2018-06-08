@@ -22,15 +22,15 @@ describe('AddGroup', () => {
     describe('addGroupFromUrl', () => {
       const middlewares = [thunk];
       const mockStore = configureStore(middlewares);
-      const store = mockStore({});
+
       const url = 'https://www.meetup.com/new-meetup/';
 
       beforeEach(() => {
-        store.clearActions();
         jest.clearAllMocks();
       });
 
       it('should dispatch loading action when start', async () => {
+        const store = mockStore({ meetupGroups: {} });
         axios.post.mockReturnValue(Promise.resolve({ data: null }));
         await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[0]).toEqual({
@@ -39,6 +39,7 @@ describe('AddGroup', () => {
       });
 
       it('should dispatch add group success and update groups', async () => {
+        const store = mockStore({ meetupGroups: {} });
         axios.post.mockReturnValue(Promise.resolve({ data: { groups: ['group1'] } }));
         await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[1]).toEqual({
@@ -51,10 +52,22 @@ describe('AddGroup', () => {
       });
 
       it('should dispatch fetch event error', async () => {
+        const store = mockStore({ meetupGroups: {} });
         axios.post.mockReturnValue(Promise.reject(new Error('error')));
         await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
+          message: 'Failed to add group, please check the group url and try again.',
+        });
+      });
+
+      it('should dispatch group already exist error', async () => {
+        const store = mockStore({ meetupGroups: { groups: ['new-meetup'] } });
+        await store.dispatch(addGroupFromUrl(url));
+        expect(axios.post).not.toHaveBeenCalled();
+        expect(store.getActions()[1]).toEqual({
+          type: 'ADD_GROUPS_ERROR',
+          message: 'Group Already Exist.',
         });
       });
     });
@@ -69,11 +82,15 @@ describe('AddGroup', () => {
       });
     });
     it('should handle error action', () => {
-      const store = addGroupReducer(undefined, { type: 'ADD_GROUPS_ERROR' });
+      const store = addGroupReducer(undefined,
+        { type: 'ADD_GROUPS_ERROR',
+          message: 'message',
+        });
       expect(store).toEqual({
         isLoading: false,
         hasError: true,
         isSuccess: false,
+        message: 'message',
       });
     });
     it('should handle success action', () => {
