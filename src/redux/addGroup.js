@@ -22,7 +22,7 @@ export const addGroupFromUrl = url => (dispatch, getState) => {
   if (includes(exisitingGroupNames, newGroupName)) {
     dispatch({
       type: ADD_GROUPS_ERROR,
-      message: 'Group Already Exist.',
+      message: 'This group has already been added.',
     });
     return null;
   }

@@ -67,7 +67,7 @@ describe('AddGroup', () => {
         expect(axios.post).not.toHaveBeenCalled();
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
-          message: 'Group Already Exist.',
+          message: 'This group has already been added.',
         });
       });
     });
