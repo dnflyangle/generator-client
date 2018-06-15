@@ -8,7 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import FontAwesome from 'react-fontawesome';
 
 import { fetchEvents } from '../../redux/meetup';
-import './Preview.css';
 
 const createMarkup = htmlContent => ({
   __html: htmlContent,

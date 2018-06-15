@@ -29,12 +29,12 @@ describe('meetupReducer', () => {
         });
       });
 
-      it('should dispatch fetch event success with purified dom data', async () => {
-        axios.post.mockReturnValue(Promise.resolve({ data: '<svg><g/onload=alert(2)//<p>' }));
+      it('should dispatch fetch event success with data', async () => {
+        axios.post.mockReturnValue(Promise.resolve({ data: '<p></p>' }));
         await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
         expect(store.getActions()[1]).toEqual({
           type: 'FETCH_EVENT_SUCCESS',
-          eventsHTML: '<svg><g></g></svg>',
+          eventsHTML: '<p></p>',
         });
       });
 

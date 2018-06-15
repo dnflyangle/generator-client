@@ -1,13 +1,9 @@
 import axios from 'axios';
-import createDOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
 import { FETCH_EVENTS } from './apiEndpoint';
 
 const FETCH_EVENT_LOADING = 'FETCH_EVENT_LOADING';
 const FETCH_EVENT_ERROR = 'FETCH_EVENT_ERROR';
 const FETCH_EVENT_SUCCESS = 'FETCH_EVENT_SUCCESS';
-
-const DOMPurify = createDOMPurify((new JSDOM('')).window);
 
 export const fetchEvents = date => (dispatch) => {
   dispatch({ type: FETCH_EVENT_LOADING });
@@ -17,7 +13,7 @@ export const fetchEvents = date => (dispatch) => {
     .then((response) => {
       dispatch({
         type: FETCH_EVENT_SUCCESS,
-        eventsHTML: DOMPurify.sanitize(response.data),
+        eventsHTML: response.data,
       });
     })
     .catch(() => {
