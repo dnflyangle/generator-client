@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { replace, isEmpty, includes } from 'lodash';
+import { includes } from 'lodash';
 import { updateGroups } from './meetupGroups';
 import { ADD_GROUPS } from './apiEndpoint';
 
@@ -8,11 +8,8 @@ const ADD_GROUPS_ERROR = 'ADD_GROUPS_ERROR';
 const ADD_GROUPS_SUCCESS = 'ADD_GROUPS_SUCCESS';
 
 export const getGroupNameFromUrl = (url) => {
-  const groupURL = url.match(/^https:\/\/www.meetup.com\/.*?\//);
-  if (isEmpty(groupURL)) {
-    return replace(replace(url, 'https://www.meetup.com/', ''), '/', '');
-  }
-  return replace(replace(groupURL[0], 'https://www.meetup.com/', ''), '/', '');
+  const groupURL = url.match(/^https:\/\/www.meetup.com\/(?:en-[a-z]{2}\/)*([^\/]+)/i);
+  return groupURL[1];
 };
 
 export const addGroupFromUrl = url => (dispatch, getState) => {
