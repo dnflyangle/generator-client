@@ -8,14 +8,22 @@ const ADD_GROUPS_ERROR = 'ADD_GROUPS_ERROR';
 const ADD_GROUPS_SUCCESS = 'ADD_GROUPS_SUCCESS';
 
 export const getGroupNameFromUrl = (url) => {
-  const groupURL = url.match(/^https:\/\/www.meetup.com\/(?:en-[a-z]{2}\/)*([^\/]+)/i);
-  return groupURL[1];
+  const groups = url.match(/^https:\/\/www.meetup.com\/(?:en-[a-z]{2}\/)*([^\/]+)/i);
+  return groups ? groups[1] : undefined;
 };
 
 export const addGroupFromUrl = url => (dispatch, getState) => {
   dispatch({ type: ADD_GROUPS_LOADING });
   const exisitingGroupNames = getState().meetupGroups.groups;
   const newGroupName = getGroupNameFromUrl(url);
+  if (!newGroupName) {
+    dispatch({
+      type: ADD_GROUPS_ERROR,
+      message: 'Group name can not be empty.',
+    });
+    return null;
+  }
+
   if (includes(exisitingGroupNames, newGroupName)) {
     dispatch({
       type: ADD_GROUPS_ERROR,

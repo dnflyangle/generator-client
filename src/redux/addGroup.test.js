@@ -20,6 +20,11 @@ describe('AddGroup', () => {
       expect(groupName).toEqual('new-meetup');
     });
 
+    it('should trim group name correctly with groups only and / at the end', () => {
+      const groupName = getGroupNameFromUrl('https://www.meetup.com/new-meetup/');
+      expect(groupName).toEqual('new-meetup');
+    });
+
     it('should trim group name correctly with culture codes', () => {
       const groupName = getGroupNameFromUrl('https://www.meetup.com/en-AU/new-meetup');
       expect(groupName).toEqual('new-meetup');
@@ -75,6 +80,16 @@ describe('AddGroup', () => {
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
           message: 'This group has already been added.',
+        });
+      });
+
+      it('should dispatch group name is empty error', async () => {
+        const store = mockStore({ meetupGroups: { groups: ['new-meetup'] } });
+        await store.dispatch(addGroupFromUrl('https://www.meetup.com/'));
+        expect(axios.post).not.toHaveBeenCalled();
+        expect(store.getActions()[1]).toEqual({
+          type: 'ADD_GROUPS_ERROR',
+          message: 'Group name can not be empty.',
         });
       });
     });
