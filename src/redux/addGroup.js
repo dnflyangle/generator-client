@@ -1,47 +1,48 @@
-import axios from 'axios';
-import { includes } from 'lodash';
-import { updateGroups } from './meetupGroups';
-import { ADD_GROUPS } from './apiEndpoint';
+import axios from "axios";
+import { includes } from "lodash";
+import { ADD_GROUPS } from "./apiEndpoint";
 
-const ADD_GROUPS_LOADING = 'ADD_GROUPS_LOADING';
-const ADD_GROUPS_ERROR = 'ADD_GROUPS_ERROR';
-const ADD_GROUPS_SUCCESS = 'ADD_GROUPS_SUCCESS';
+const ADD_GROUPS_LOADING = "ADD_GROUPS_LOADING";
+const ADD_GROUPS_ERROR = "ADD_GROUPS_ERROR";
+const ADD_GROUPS_SUCCESS = "ADD_GROUPS_SUCCESS";
 
 export const getGroupNameFromUrl = (url) => {
-  const groups = url.match(/^https:\/\/www.meetup.com\/(?:en-[a-z]{2}\/)*([^\/]+)/i);
+  const groups = url.match(
+    /^https:\/\/www.meetup.com\/(?:en-[a-z]{2}\/)*([^\/]+)/i
+  );
   return groups ? groups[1] : undefined;
 };
 
-export const addGroupFromUrl = url => (dispatch, getState) => {
+export const addGroupFromUrl = (url, existingGroupNames) => (dispatch) => {
   dispatch({ type: ADD_GROUPS_LOADING });
-  const exisitingGroupNames = getState().meetupGroups.groups;
   const newGroupName = getGroupNameFromUrl(url);
   if (!newGroupName) {
     dispatch({
       type: ADD_GROUPS_ERROR,
-      message: 'Group name can not be empty.',
+      message: "Group name can not be empty.",
     });
     return null;
   }
 
-  if (includes(exisitingGroupNames, newGroupName)) {
+  if (includes(existingGroupNames, newGroupName)) {
     dispatch({
       type: ADD_GROUPS_ERROR,
-      message: 'This group has already been added.',
+      message: "This group has already been added.",
     });
     return null;
   }
-  return axios.post(ADD_GROUPS, {
-    groupName: newGroupName,
-  })
-    .then((response) => {
+  return axios
+    .post(ADD_GROUPS, {
+      groupName: newGroupName,
+    })
+    .then(() => {
       dispatch({ type: ADD_GROUPS_SUCCESS });
-      dispatch(updateGroups(response.data.groups));
     })
     .catch(() => {
       dispatch({
         type: ADD_GROUPS_ERROR,
-        message: 'Failed to add group, please check the group url and try again.',
+        message:
+          "Failed to add group, please check the group url and try again.",
       });
     });
 };

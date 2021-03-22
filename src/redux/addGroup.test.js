@@ -50,16 +50,12 @@ describe('AddGroup', () => {
         });
       });
 
-      it('should dispatch add group success and update groups', async () => {
+      it('should dispatch add group success', async () => {
         const store = mockStore({ meetupGroups: {} });
         axios.post.mockReturnValue(Promise.resolve({ data: { groups: ['group1'] } }));
         await store.dispatch(addGroupFromUrl(url));
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_SUCCESS',
-        });
-        expect(store.getActions()[2]).toEqual({
-          type: 'UPDATE_GROUPS',
-          groups: ['group1'],
         });
       });
 
@@ -75,7 +71,7 @@ describe('AddGroup', () => {
 
       it('should dispatch group already exist error', async () => {
         const store = mockStore({ meetupGroups: { groups: ['new-meetup'] } });
-        await store.dispatch(addGroupFromUrl(url));
+        await store.dispatch(addGroupFromUrl(url, ['new-meetup']));
         expect(axios.post).not.toHaveBeenCalled();
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
