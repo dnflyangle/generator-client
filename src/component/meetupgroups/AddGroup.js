@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { isEmpty } from 'lodash';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   FormGroup,
@@ -12,30 +11,39 @@ import {
 
 import { addGroup } from './redux/actions';
 
-const loadingSelector = (state) => state.meetupGroups.addGroupsLoading;
+const loadingSelector = (state) => {
+  const { meetupGroups } = state;
+  return meetupGroups.addGroupsLoading || meetupGroups.getGroupsLoading;
+};
+
 const errorSelector = (state) => state.meetupGroups.addGroupsError;
 const successSelector = (state) => state.meetupGroups.addGroupsSuccess;
 const groupsSelector = (state) => state.meetupGroups.groups;
 
+const calculateValidationState = (value) => {
+  if (!value || value.length === 0) {
+    return null;
+  }
+  const regex = /^https:\/\/www.meetup.com\//i;
+  if (regex.test(value)) {
+    return 'success';
+  }
+  return 'error';
+};
+
 const AddGroup = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(null);
+  const [validationState, setValidationState] = useState(null);
 
   const loading = useSelector(loadingSelector);
   const error = useSelector(errorSelector);
   const isSuccess = useSelector(successSelector);
   const existingGroups = useSelector(groupsSelector);
 
-  const getValidationState = () => {
-    if (isEmpty(value)) {
-      return null;
-    }
-    const regex = /^https:\/\/www.meetup.com\//i;
-    if (regex.test(value)) {
-      return 'success';
-    }
-    return 'error';
-  };
+  useEffect(() => {
+    setValidationState(calculateValidationState(value));
+  }, [value, setValidationState]);
 
   const handleValueChange = (e) => setValue(e.target.value);
 
@@ -43,7 +51,7 @@ const AddGroup = () => {
 
   return (
     <Well style={{ marginTop: '20px' }}>
-      <FormGroup controlId="formBasicText" validationState={getValidationState}>
+      <FormGroup controlId="formBasicText" validationState={validationState}>
         <ControlLabel>Add new group</ControlLabel>
         <FormControl
           type="text"
