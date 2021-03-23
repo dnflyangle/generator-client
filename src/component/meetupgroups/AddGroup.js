@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { isEmpty } from "lodash";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { isEmpty } from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   FormGroup,
   ControlLabel,
@@ -8,13 +8,13 @@ import {
   Button,
   FormControl,
   Well,
-} from "react-bootstrap";
+} from 'react-bootstrap';
 
-import { addGroupFromUrl } from "./redux/addGroup";
+import { addGroup } from './redux/actions';
 
-const loadingSelector = (state) => state.addGroup.isLoading;
-const errorSelector = (state) => state.addGroup.error;
-const successSelector = (state) => state.addGroup.isSuccess;
+const loadingSelector = (state) => state.meetupGroups.addGroupsLoading;
+const errorSelector = (state) => state.meetupGroups.addGroupsError;
+const successSelector = (state) => state.meetupGroups.addGroupsSuccess;
 const groupsSelector = (state) => state.meetupGroups.groups;
 
 const AddGroup = () => {
@@ -32,17 +32,17 @@ const AddGroup = () => {
     }
     const regex = /^https:\/\/www.meetup.com\//i;
     if (regex.test(value)) {
-      return "success";
+      return 'success';
     }
-    return "error";
+    return 'error';
   };
 
   const handleValueChange = (e) => setValue(e.target.value);
 
-  const handleAddGroup = () => dispatch(addGroupFromUrl(value, existingGroups));
+  const handleAddGroup = () => dispatch(addGroup(value, existingGroups));
 
   return (
-    <Well style={{ marginTop: "20px" }}>
+    <Well style={{ marginTop: '20px' }}>
       <FormGroup controlId="formBasicText" validationState={getValidationState}>
         <ControlLabel>Add new group</ControlLabel>
         <FormControl
@@ -55,12 +55,12 @@ const AddGroup = () => {
           For example: https://www.meetup.com/Sydney-CoreOS-User-Group/
         </HelpBlock>
       </FormGroup>
-      {error && <h5 style={{ color: "red" }}>{error}</h5>}
+      {error && <h5 style={{ color: 'red' }}>{error}</h5>}
       {isSuccess && (
-        <h5 style={{ color: "green" }}>Successfully added group.</h5>
+        <h5 style={{ color: 'green' }}>Successfully added group.</h5>
       )}
       <Button disabled={loading} onClick={handleAddGroup}>
-        {loading ? "Submitting..." : "Submit"}
+        {loading ? 'Submitting...' : 'Submit'}
       </Button>
     </Well>
   );

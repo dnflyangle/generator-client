@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import meetup from './meetup';
-import meetupGroups from '../component/meetupgroups/redux/meetupGroups'
-import addGroup from '../component/meetupgroups/redux/addGroup';
+import meetupEvents from '../component/preview/redux/events';
+import meetupGroups from '../component/meetupgroups/redux/meetupGroups';
 
 export default combineReducers({
-  meetup,
   meetupGroups,
-  addGroup,
+  meetupEvents,
 });

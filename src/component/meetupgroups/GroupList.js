@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { orderBy, map } from "lodash";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
-import FontAwesome from "react-fontawesome";
+import { orderBy, map } from 'lodash';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import FontAwesome from 'react-fontawesome';
 
-import { getGroups } from "./redux/meetupGroups";
+import { getGroups } from './redux/actions';
 
-const loadingSelector = (state) => state.meetupGroups.isLoading;
-const errorSelector = (state) => state.meetupGroups.hasError;
+const loadingSelector = (state) => state.meetupGroups.getGroupsLoading;
+const errorSelector = (state) => state.meetupGroups.getGroupsError;
 const groupsSelector = (state) => state.meetupGroups.groups;
 
 const GroupList = () => {
@@ -34,7 +34,7 @@ const GroupList = () => {
     );
   }
   return (
-    <ListGroup style={{ paddingTop: "1%" }}>
+    <ListGroup style={{ paddingTop: '1%' }}>
       {map(orderBy(groups), (group) => (
         <ListGroupItem
           key={group}

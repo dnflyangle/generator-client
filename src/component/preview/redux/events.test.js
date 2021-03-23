@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import moment from 'moment';
 import axios from 'axios';
 
-import meetupReducer, { fetchEvents } from './meetup';
+import meetupReducer, { fetchEvents } from './events';
 
 jest.mock('axios', () => ({
   post: jest.fn(),
@@ -25,31 +25,31 @@ describe('meetupReducer', () => {
         axios.post.mockReturnValue(Promise.resolve({ data: null }));
         await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
         expect(store.getActions()[0]).toEqual({
-          type: 'FETCH_EVENT_LOADING',
+          type: 'GET_EVENTS_LOADING',
         });
       });
 
-      it('should dispatch fetch event success with data', async () => {
+      it('should dispatch get events success with data', async () => {
         axios.post.mockReturnValue(Promise.resolve({ data: '<p></p>' }));
         await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
         expect(store.getActions()[1]).toEqual({
-          type: 'FETCH_EVENT_SUCCESS',
+          type: 'GET_EVENTS_SUCCESS',
           eventsHTML: '<p></p>',
         });
       });
 
-      it('should dispatch fetch event error', async () => {
+      it('should dispatch get events error', async () => {
         axios.post.mockReturnValue(Promise.reject(new Error('error')));
         await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
         expect(store.getActions()[1]).toEqual({
-          type: 'FETCH_EVENT_ERROR',
+          type: 'GET_EVENTS_ERROR',
         });
       });
     });
   });
   describe('reducer', () => {
     it('should handle loading action', () => {
-      const store = meetupReducer(undefined, { type: 'FETCH_EVENT_LOADING' });
+      const store = meetupReducer(undefined, { type: 'GET_EVENTS_LOADING' });
       expect(store).toEqual({
         isLoading: true,
         hasError: false,
@@ -57,7 +57,7 @@ describe('meetupReducer', () => {
       });
     });
     it('should handle error action', () => {
-      const store = meetupReducer(undefined, { type: 'FETCH_EVENT_ERROR' });
+      const store = meetupReducer(undefined, { type: 'GET_EVENTS_ERROR' });
       expect(store).toEqual({
         isLoading: false,
         hasError: true,
@@ -66,7 +66,7 @@ describe('meetupReducer', () => {
     });
     it('should handle success action', () => {
       const store = meetupReducer(undefined, {
-        type: 'FETCH_EVENT_SUCCESS',
+        type: 'GET_EVENTS_SUCCESS',
         eventsHTML: 'html',
       });
       expect(store).toEqual({

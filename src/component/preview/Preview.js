@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { Button, Well, Grid, Row, Col } from 'react-bootstrap';
+import {
+  Button, Well, Grid, Row, Col,
+} from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import FontAwesome from 'react-fontawesome';
 
-import { fetchEvents } from '../../redux/meetup';
+import { fetchEvents } from './redux/events';
 
-const createMarkup = htmlContent => ({
+const createMarkup = (htmlContent) => ({
   __html: htmlContent,
 });
 
@@ -20,60 +22,54 @@ const bodyStyle = {
   width: '65%',
 };
 
-class Preview extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      startDate: moment(),
-    };
-  }
+const Preview = ({
+  eventsHTML, isLoading, hasError, dispatchFetchEvents,
+}) => {
+  const [startDate, setStartDate] = useState(moment());
 
-  render() {
-    const {
-      eventsHTML,
-      isLoading,
-      hasError,
-      dispatchFetchEvents,
-    } = this.props;
-    const loader = isLoading ? <FontAwesome name="spinner" spin size="2x" /> : null;
-    const error = hasError ? <div><p className="App-intro">An Error occurred.</p></div> : null;
-    const events = (!isLoading && !hasError && eventsHTML) ?
-      <div dangerouslySetInnerHTML={createMarkup(eventsHTML)} /> : null;
+  const loader = isLoading ? (
+    <FontAwesome name="spinner" spin size="2x" />
+  ) : null;
+  const error = hasError ? (
+    <div>
+      <p className="App-intro">An Error occurred.</p>
+    </div>
+  ) : null;
+  const events = !isLoading && !hasError && eventsHTML ? (
+    <div dangerouslySetInnerHTML={createMarkup(eventsHTML)} />
+  ) : null;
 
-    return (
-      <div style={{ padding: '0 10%' }}>
-        <Well>
-          <Grid>
-            <Row className="show-grid">
-              <Col xs={6} md={4} style={{ textAlign: 'center' }}>
-                <h4>Pick a Date:</h4>
-              </Col>
-              <Col xs={6} md={4}>
-                <DatePicker
-                  selected={this.state.startDate}
-                  onChange={date => this.setState({ startDate: date })}
-                  dateFormat="DD/MM/YYYY"
-                />
-              </Col>
-              <Col xs={6} md={4}>
-                <Button
-                  onClick={() => dispatchFetchEvents(this.state.startDate)}
-                >
-                    Preview Event
-                </Button>
-              </Col>
-            </Row>
-          </Grid>
-        </Well>
-        <div style={bodyStyle}>
-          {loader}
-          {error}
-          {events}
-        </div>
-      </div >
-    );
-  }
-}
+  return (
+    <div style={{ padding: '0 10%' }}>
+      <Well>
+        <Grid>
+          <Row className="show-grid">
+            <Col xs={6} md={4} style={{ textAlign: 'center' }}>
+              <h4>Pick a Date:</h4>
+            </Col>
+            <Col xs={6} md={4}>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate({ startDate: date })}
+                dateFormat="DD/MM/YYYY"
+              />
+            </Col>
+            <Col xs={6} md={4}>
+              <Button onClick={() => dispatchFetchEvents(startDate)}>
+                Preview Event
+              </Button>
+            </Col>
+          </Row>
+        </Grid>
+      </Well>
+      <div style={bodyStyle}>
+        {loader}
+        {error}
+        {events}
+      </div>
+    </div>
+  );
+};
 
 Preview.defaultProps = {
   eventsHTML: undefined,
@@ -86,14 +82,14 @@ Preview.propTypes = {
   dispatchFetchEvents: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isLoading: state.meetup.isLoading,
-  hasError: state.meetup.hasError,
-  eventsHTML: state.meetup.eventsHTML,
+const mapStateToProps = (state) => ({
+  isLoading: state.meetupEvents.isLoading,
+  hasError: state.meetupEvents.hasError,
+  eventsHTML: state.meetupEvents.eventsHTML,
 });
 
-const mapDispatchToProps = dispatch => ({
-  dispatchFetchEvents: date => dispatch(fetchEvents(date)),
+const mapDispatchToProps = (dispatch) => ({
+  dispatchFetchEvents: (date) => dispatch(fetchEvents(date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Preview);

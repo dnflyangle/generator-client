@@ -1,53 +1,64 @@
-import axios from 'axios';
-import { orderBy } from 'lodash';
-import { GET_GROUPS } from '../../../redux/apiEndpoint';
-
-const FETCH_GROUPS_LOADING = 'FETCH_GROUPS_LOADING';
-const FETCH_GROUPS_ERROR = 'FETCH_GROUPS_ERROR';
-const FETCH_GROUPS_SUCCESS = 'FETCH_GROUPS_SUCCESS';
-
-export const getGroups = () => (dispatch) => {
-  dispatch({ type: FETCH_GROUPS_LOADING });
-  return axios.get(GET_GROUPS)
-    .then((response) => {
-      dispatch({
-        type: FETCH_GROUPS_SUCCESS,
-        groups: orderBy(response.data.groups),
-      });
-    })
-    .catch(() => {
-      dispatch({ type: FETCH_GROUPS_ERROR });
-    });
-};
+import {
+  ADD_GROUPS_LOADING,
+  ADD_GROUPS_ERROR,
+  ADD_GROUPS_SUCCESS,
+  GET_GROUPS_LOADING,
+  GET_GROUPS_SUCCESS,
+  GET_GROUPS_ERROR,
+} from './constants';
 
 const initialState = {
-  isLoading: false,
-  hasError: false,
+  getGroupsLoading: false,
+  getGroupsError: false,
   groups: undefined,
+  addGroupsLoading: false,
+  addGroupsError: undefined,
+  addGroupsSuccess: false,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_GROUPS_LOADING:
+    case GET_GROUPS_LOADING:
       return {
         ...state,
-        isLoading: true,
-        hasError: false,
+        getGroupsLoading: true,
+        getGroupsError: false,
         groups: undefined,
       };
-    case FETCH_GROUPS_ERROR:
+    case GET_GROUPS_ERROR:
       return {
         ...state,
-        isLoading: false,
-        hasError: true,
+        getGroupsLoading: false,
+        getGroupsError: true,
         groups: undefined,
       };
-    case FETCH_GROUPS_SUCCESS:
+    case GET_GROUPS_SUCCESS:
       return {
         ...state,
-        isLoading: false,
-        hasError: false,
+        getGroupsLoading: false,
+        getGroupsError: false,
         groups: action.groups,
+      };
+    case ADD_GROUPS_LOADING:
+      return {
+        ...state,
+        addGroupsLoading: true,
+        addGroupsError: undefined,
+        addGroupsSuccess: false,
+      };
+    case ADD_GROUPS_ERROR:
+      return {
+        ...state,
+        addGroupsLoading: false,
+        addGroupsError: action.message,
+        addGroupsSuccess: false,
+      };
+    case ADD_GROUPS_SUCCESS:
+      return {
+        ...state,
+        addGroupsLoading: false,
+        addGroupsError: undefined,
+        addGroupsSuccess: true,
       };
     default:
       return state;
