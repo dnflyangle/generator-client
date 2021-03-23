@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { orderBy, map } from 'lodash';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 
@@ -35,7 +34,7 @@ const GroupList = () => {
   }
   return (
     <ListGroup style={{ paddingTop: '1%' }}>
-      {map(orderBy(groups), (group) => (
+      {groups.map((group) => (
         <ListGroupItem
           key={group}
           href={`https://www.meetup.com/${group}/`}

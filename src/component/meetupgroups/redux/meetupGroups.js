@@ -10,7 +10,7 @@ import {
 const initialState = {
   getGroupsLoading: false,
   getGroupsError: false,
-  groups: undefined,
+  groups: [],
   addGroupsLoading: false,
   addGroupsError: undefined,
   addGroupsSuccess: false,

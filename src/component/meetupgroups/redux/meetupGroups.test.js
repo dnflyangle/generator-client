@@ -47,7 +47,7 @@ describe('meetupGroupReducer', () => {
         expect(store).toEqual({
           getGroupsLoading: false,
           getGroupsError: false,
-          groups: undefined,
+          groups: [],
           addGroupsLoading: true,
           addGroupsError: undefined,
           addGroupsSuccess: false,
@@ -62,7 +62,7 @@ describe('meetupGroupReducer', () => {
         expect(store).toEqual({
           getGroupsLoading: false,
           getGroupsError: false,
-          groups: undefined,
+          groups: [],
           addGroupsLoading: false,
           addGroupsError: 'message',
           addGroupsSuccess: false,
@@ -75,7 +75,7 @@ describe('meetupGroupReducer', () => {
         expect(store).toEqual({
           getGroupsLoading: false,
           getGroupsError: false,
-          groups: undefined,
+          groups: [],
           addGroupsLoading: false,
           addGroupsError: undefined,
           addGroupsSuccess: true,
