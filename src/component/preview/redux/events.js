@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { getEventsFromApi } from '../../../api';
 
 const GET_EVENTS_LOADING = 'GET_EVENTS_LOADING';
@@ -8,7 +9,7 @@ export const fetchEvents = (date) => async (dispatch) => {
   dispatch({ type: GET_EVENTS_LOADING });
 
   try {
-    const { data } = await getEventsFromApi(date.format('DD/MM/YYYY'));
+    const { data } = await getEventsFromApi(format(date, 'dd/mm/yyyy'));
     dispatch({
       type: GET_EVENTS_SUCCESS,
       eventsHTML: data,

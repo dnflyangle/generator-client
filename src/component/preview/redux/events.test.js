@@ -1,6 +1,5 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import moment from 'moment';
 import axios from 'axios';
 
 import meetupReducer, { fetchEvents } from './events';
@@ -23,7 +22,7 @@ describe('meetupReducer', () => {
 
       it('should dispatch loading action when start', async () => {
         axios.post.mockReturnValue(Promise.resolve({ data: null }));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        await store.dispatch(fetchEvents(new Date('2018-05-28')));
         expect(store.getActions()[0]).toEqual({
           type: 'GET_EVENTS_LOADING',
         });
@@ -31,7 +30,7 @@ describe('meetupReducer', () => {
 
       it('should dispatch get events success with data', async () => {
         axios.post.mockReturnValue(Promise.resolve({ data: '<p></p>' }));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        await store.dispatch(fetchEvents(new Date('2018-05-28')));
         expect(store.getActions()[1]).toEqual({
           type: 'GET_EVENTS_SUCCESS',
           eventsHTML: '<p></p>',
@@ -40,7 +39,7 @@ describe('meetupReducer', () => {
 
       it('should dispatch get events error', async () => {
         axios.post.mockReturnValue(Promise.reject(new Error('error')));
-        await store.dispatch(fetchEvents(moment('2018-05-28', 'YYYY-MM-DD')));
+        await store.dispatch(fetchEvents(new Date('2018-05-28')));
         expect(store.getActions()[1]).toEqual({
           type: 'GET_EVENTS_ERROR',
         });

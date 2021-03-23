@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 import {
   Button, Well, Grid, Row, Col,
 } from 'react-bootstrap';
@@ -25,7 +24,7 @@ const bodyStyle = {
 const Preview = ({
   eventsHTML, isLoading, hasError, dispatchFetchEvents,
 }) => {
-  const [startDate, setStartDate] = useState(moment());
+  const [startDate, setStartDate] = useState(new Date());
 
   const loader = isLoading ? (
     <FontAwesome name="spinner" spin size="2x" />
