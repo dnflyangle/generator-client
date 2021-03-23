@@ -59,6 +59,15 @@ describe('AddGroup', () => {
         });
       });
 
+      it('should dispatch fetch groups after add group success', async () => {
+        const store = mockStore({ meetupGroups: {} });
+        axios.post.mockReturnValue(Promise.resolve({ data: { groups: ['group1'] } }));
+        await store.dispatch(addGroupFromUrl(url));
+        expect(store.getActions()[2]).toEqual({
+          type: 'FETCH_GROUPS_LOADING',
+        });
+      });
+
       it('should dispatch fetch event error', async () => {
         const store = mockStore({ meetupGroups: {} });
         axios.post.mockReturnValue(Promise.reject(new Error('error')));
@@ -81,7 +90,7 @@ describe('AddGroup', () => {
 
       it('should dispatch group name is empty error', async () => {
         const store = mockStore({ meetupGroups: { groups: ['new-meetup'] } });
-        await store.dispatch(addGroupFromUrl('https://www.meetup.com/'));
+        await store.dispatch(addGroupFromUrl(undefined, ['new-meetup']));
         expect(axios.post).not.toHaveBeenCalled();
         expect(store.getActions()[1]).toEqual({
           type: 'ADD_GROUPS_ERROR',
@@ -95,7 +104,7 @@ describe('AddGroup', () => {
       const store = addGroupReducer(undefined, { type: 'ADD_GROUPS_LOADING' });
       expect(store).toEqual({
         isLoading: true,
-        hasError: false,
+        error: undefined,
         isSuccess: false,
       });
     });
@@ -106,9 +115,8 @@ describe('AddGroup', () => {
         });
       expect(store).toEqual({
         isLoading: false,
-        hasError: true,
         isSuccess: false,
-        message: 'message',
+        error: 'message',
       });
     });
     it('should handle success action', () => {
@@ -117,7 +125,7 @@ describe('AddGroup', () => {
       });
       expect(store).toEqual({
         isLoading: false,
-        hasError: false,
+        error: undefined,
         isSuccess: true,
       });
     });

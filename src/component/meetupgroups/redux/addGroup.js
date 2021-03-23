@@ -1,6 +1,7 @@
 import axios from "axios";
 import { includes } from "lodash";
-import { ADD_GROUPS } from "./apiEndpoint";
+import { ADD_GROUPS } from "../../../redux/apiEndpoint";
+import { getGroups } from "./meetupGroups";
 
 const ADD_GROUPS_LOADING = "ADD_GROUPS_LOADING";
 const ADD_GROUPS_ERROR = "ADD_GROUPS_ERROR";
@@ -15,15 +16,16 @@ export const getGroupNameFromUrl = (url) => {
 
 export const addGroupFromUrl = (url, existingGroupNames) => (dispatch) => {
   dispatch({ type: ADD_GROUPS_LOADING });
-  const newGroupName = getGroupNameFromUrl(url);
-  if (!newGroupName) {
+
+  if (!url) {
     dispatch({
       type: ADD_GROUPS_ERROR,
       message: "Group name can not be empty.",
     });
     return null;
   }
-
+  
+  const newGroupName = getGroupNameFromUrl(url);
   if (includes(existingGroupNames, newGroupName)) {
     dispatch({
       type: ADD_GROUPS_ERROR,
@@ -37,6 +39,7 @@ export const addGroupFromUrl = (url, existingGroupNames) => (dispatch) => {
     })
     .then(() => {
       dispatch({ type: ADD_GROUPS_SUCCESS });
+      dispatch(getGroups());
     })
     .catch(() => {
       dispatch({
@@ -49,9 +52,8 @@ export const addGroupFromUrl = (url, existingGroupNames) => (dispatch) => {
 
 const initialState = {
   isLoading: false,
-  hasError: false,
+  error: undefined,
   isSuccess: false,
-  message: undefined,
 };
 
 export default (state = initialState, action) => {
@@ -60,22 +62,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        hasError: false,
+        error: undefined,
         isSuccess: false,
       };
     case ADD_GROUPS_ERROR:
       return {
         ...state,
         isLoading: false,
-        hasError: true,
         isSuccess: false,
-        message: action.message,
+        error: action.message,
       };
     case ADD_GROUPS_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        hasError: false,
+        error: undefined,
         isSuccess: true,
       };
     default:
