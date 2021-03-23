@@ -48,8 +48,8 @@ const Preview = ({
             <Col xs={6} md={4}>
               <DatePicker
                 value={startDate}
-                onChange={(date) => setStartDate({ startDate: date })}
-                format="DD/MM/YYYY"
+                onChange={setStartDate}
+                format="dd/MM/y"
               />
             </Col>
             <Col xs={6} md={4}>
