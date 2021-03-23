@@ -20,15 +20,15 @@ ReactDOM.render(
     <BrowserRouter>
       <Header>
         <Switch>
-          <Route path='/preview' component={Preview} />
-          <Route path='/groups' component={MeetupGroups} />
-          <Route path='/' component={Home} />
+          <Route path="/preview" component={Preview} />
+          <Route path="/groups" component={MeetupGroups} />
+          <Route path="/" component={Home} />
         </Switch>
       </Header>
     </BrowserRouter>
   </Provider>,
 
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 registerServiceWorker();
