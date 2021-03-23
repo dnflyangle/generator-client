@@ -18,7 +18,7 @@ const buttonStyle = {
 const Home = () => (
   <Jumbotron>
     <div style={jumbotronHeader}>
-      <h1>{"G'day Straya!"}</h1>
+      <h1>Gday Straya!</h1>
       <p>
         As a Thoughtworker, I want to ...
       </p>

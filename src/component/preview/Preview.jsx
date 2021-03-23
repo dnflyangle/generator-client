@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import DatePicker from 'react-datepicker';
+import DatePicker from 'react-date-picker';
 import {
   Button, Well, Grid, Row, Col,
 } from 'react-bootstrap';
-import 'react-datepicker/dist/react-datepicker.css';
 import FontAwesome from 'react-fontawesome';
 
 import { fetchEvents } from './redux/events';
@@ -48,9 +47,9 @@ const Preview = ({
             </Col>
             <Col xs={6} md={4}>
               <DatePicker
-                selected={startDate}
+                value={startDate}
                 onChange={(date) => setStartDate({ startDate: date })}
-                dateFormat="DD/MM/YYYY"
+                format="DD/MM/YYYY"
               />
             </Col>
             <Col xs={6} md={4}>

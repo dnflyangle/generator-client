@@ -13,22 +13,22 @@ import Home from './component/Home';
 import Header from './component/Header';
 import MeetupGroups from './component/meetupgroups/MeetupGroups';
 
-const store = createStore(reducer, compose(
-  applyMiddleware(thunk),
-));
+const store = createStore(reducer, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Header>
         <Switch>
-          <Route path="/preview" component={Preview} />
-          <Route path="/groups" component={MeetupGroups} />
-          <Route path="/" component={Home} />
+          <Route path='/preview' component={Preview} />
+          <Route path='/groups' component={MeetupGroups} />
+          <Route path='/' component={Home} />
         </Switch>
       </Header>
     </BrowserRouter>
   </Provider>,
-  document.getElementById('root'));
+
+  document.getElementById('root')
+);
 
 registerServiceWorker();
