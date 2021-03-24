@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "CI=true react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .js,.jsx --quiet --fix"
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.5",
@@ -38,7 +39,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm test"
+      "pre-push": "npm test && npm run lint"
     }
   },
   "browserslist": {
