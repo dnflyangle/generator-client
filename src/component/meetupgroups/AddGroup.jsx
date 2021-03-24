@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   FormGroup,
   ControlLabel,
@@ -7,9 +7,9 @@ import {
   Button,
   FormControl,
   Well,
-} from 'react-bootstrap';
+} from "react-bootstrap";
 
-import { addGroup } from './redux/actions';
+import { addGroup } from "./redux/actions";
 
 const loadingSelector = (state) => {
   const { meetupGroups } = state;
@@ -17,6 +17,7 @@ const loadingSelector = (state) => {
 };
 
 const errorSelector = (state) => state.meetupGroups.addGroupsError;
+const addGroupLoadingSelector = (state) => state.meetupGroups.addGroupsLoading;
 const successSelector = (state) => state.meetupGroups.addGroupsSuccess;
 const groupsSelector = (state) => state.meetupGroups.groups;
 
@@ -26,9 +27,9 @@ const calculateValidationState = (value) => {
   }
   const regex = /^https:\/\/www.meetup.com\//i;
   if (regex.test(value)) {
-    return 'success';
+    return "success";
   }
-  return 'error';
+  return "error";
 };
 
 const AddGroup = () => {
@@ -37,6 +38,7 @@ const AddGroup = () => {
   const [validationState, setValidationState] = useState(null);
 
   const loading = useSelector(loadingSelector);
+  const addGroupLoading = useSelector(addGroupLoadingSelector);
   const error = useSelector(errorSelector);
   const isSuccess = useSelector(successSelector);
   const existingGroups = useSelector(groupsSelector);
@@ -50,7 +52,7 @@ const AddGroup = () => {
   const handleAddGroup = () => dispatch(addGroup(value, existingGroups));
 
   return (
-    <Well style={{ marginTop: '20px' }}>
+    <Well style={{ marginTop: "20px" }}>
       <FormGroup controlId="formBasicText" validationState={validationState}>
         <ControlLabel>Add new group</ControlLabel>
         <FormControl
@@ -63,12 +65,12 @@ const AddGroup = () => {
           For example: https://www.meetup.com/Sydney-CoreOS-User-Group/
         </HelpBlock>
       </FormGroup>
-      {error && <h5 style={{ color: 'red' }}>{error}</h5>}
+      {error && <h5 style={{ color: "red" }}>{error}</h5>}
       {isSuccess && (
-        <h5 style={{ color: 'green' }}>Successfully added group.</h5>
+        <h5 style={{ color: "green" }}>Successfully added group.</h5>
       )}
       <Button disabled={loading} onClick={handleAddGroup}>
-        {loading ? 'Submitting...' : 'Submit'}
+        {addGroupLoading ? 'Submitting' : 'Submit'}
       </Button>
     </Well>
   );
